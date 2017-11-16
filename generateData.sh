@@ -57,7 +57,6 @@ NAME="upgrade-data-$ENGINE-$VERSION"
 echo 'Starting server...'
 $ARANGOD --database.directory $PREFIX/$NAME \
          --server.storage-engine $ENGINE \
-         --server.authentication false \
          --server.endpoint http+tcp://localhost:23456 \
          | tee $PREFIX/arangod.stdout 2>&1 &
 sleep 10
