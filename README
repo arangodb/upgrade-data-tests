@@ -1,0 +1,3 @@
+# Upgrade Tests with Data
+
+This repository contains the data necessary to run the various `upgrade_data_*` tests for ArangoDB, as well as scripts to help generate that data for a given build and configuration.
