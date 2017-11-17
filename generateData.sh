@@ -59,15 +59,25 @@ $ARANGOD --database.directory $PREFIX/$NAME \
          --server.storage-engine $ENGINE \
          --server.endpoint http+tcp://localhost:23456 \
          | tee $PREFIX/arangod.stdout 2>&1 &
-sleep 10
+PID=%1
+while true ; do
+  curl http://localhost:23456/_api/version > /dev/null 2>&1
+  if [ "$?" != "0" ] ; then
+    echo '...waiting...'
+  else
+    echo '...server ready!'
+    break
+  fi
+  sleep 1
+done
 
 echo 'Running data generation script...'
 $ARANGOSH --server.endpoint http+tcp://localhost:23456 \
           --javascript.execute $PREFIX/js/generateData.js
 
 echo 'Stopping server...'
-curl -X DELETE --silent http://localhost:23456/_admin/shutdown > /dev/null
-sleep 10
+kill -2 $PID
+wait $PID
 
 echo 'Creating archive...'
 (
