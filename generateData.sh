@@ -65,10 +65,11 @@ while true ; do
   if [ "$?" != "0" ] ; then
     echo '...waiting...'
   else
+    sleep 3
     echo '...server ready!'
     break
   fi
-  sleep 1
+  sleep 3
 done
 
 echo 'Running data generation script...'
