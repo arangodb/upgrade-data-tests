@@ -52,7 +52,7 @@ fill_missing_args
 PREFIX='upgrade-data-tests'
 ARANGOD="$BUILD/bin/arangod"
 ARANGOSH="$BUILD/bin/arangosh"
-NAME="upgrade-data-$ENGINE-$VERSION"
+NAME="upgrade-data-$VERSION-$ENGINE"
 
 echo 'Starting server...'
 $ARANGOD --database.directory $PREFIX/$NAME \
