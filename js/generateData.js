@@ -99,13 +99,50 @@ const generateLargeCollection = {
   }
 };
 
+const generateCollectionUpgrade = {
+  minimumSupportedVersion: "3.6.0",
+  engines: ['rocksdb'],
+  generate: () => {
+    const c = db._create('CollectionUpgrade');
+    c.ensureIndex({
+      type: 'hash',
+      fields: ['num'],
+      unique: true
+    });
+    c.ensureIndex({
+      type: 'hash',
+      fields: ['num10'],
+      unique: false
+    });
+    c.ensureIndex({
+      type: 'geo',
+      fields: ['location'],
+      geoJson: true
+    });
+    c.ensureIndex({
+      type: 'fulltext',
+      fields: ['name'],
+    });
+    for (let i = 0; i < 100; i++) {
+      c.save({
+        _key: `key${i}`,
+        location: {coordinates: [i, i], type: 'Point'},
+        name: `Name ${i}`,
+        num: i,
+        num10: i % 10,
+      });
+    }
+  }
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Tie all of it together and run the generators compatible with the current
 /// configuration
 ////////////////////////////////////////////////////////////////////////////////
 
 const generators = [
-  generateLargeCollection
+  generateLargeCollection,
+  generateCollectionUpgrade
 ];
 
 const generateData = (engine, version) => {
