@@ -132,6 +132,16 @@ const generateCollectionUpgrade = {
         num10: i % 10,
       });
     }
+
+    const e = db._createEdgeCollection('EdgeCollectionUpgrade');
+    for (let i = 0; i < 100; i++) {
+      for (let j = i; j < i + 10 && j < 100; j++) {
+        e.save({
+          _from: `CollectionUpgrade/key${i}`,
+          _to: `CollectionUpgrade/key${j}`,
+        })
+      }
+    }
   }
 };
 

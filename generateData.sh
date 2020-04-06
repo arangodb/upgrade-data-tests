@@ -58,15 +58,15 @@ echo 'Starting server...'
 $ARANGOD --database.directory $PREFIX/$NAME \
          --server.storage-engine $ENGINE \
          --server.endpoint http+tcp://localhost:23456 \
-         | tee $PREFIX/arangod.stdout 2>&1 &
-PID=%1
+         --log.output file://$PREFIX/arangod.log > /dev/null 2>&1 &
+PID=$!
 while true ; do
   curl http://localhost:23456/_api/version > /dev/null 2>&1
   if [ "$?" != "0" ] ; then
-    echo '...waiting...'
+    echo "...waiting for $PID to become ready..."
   else
     sleep 3
-    echo '...server ready!'
+    echo "...server $PID ready!"
     break
   fi
   sleep 3
@@ -88,6 +88,6 @@ echo 'Creating archive...'
       --file=../data/$NAME.tar.gz \
       *
 )
-rm -rf $PREFIX/arangod.stdout $PREFIX/$NAME
+rm -rf $PREFIX/arangod.log $PREFIX/$NAME
 
 echo 'Done!'
